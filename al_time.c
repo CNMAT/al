@@ -39,7 +39,7 @@ al_obj al_time_toString(al_region r, al_time t)
 
 al_time al_time_fromString(al_region r, al_obj s)
 {
-	if(cal_obj_getType(r, s) != AL_OBJ_ATOM){
+	if(cal_obj_getType(r, s) != AL_OBJ_TYPE_ATOM){
 		return AL_OSCTIME_NULL;
 	}
 	al_c_ptr p = cal_atom_getPtr(r, s);

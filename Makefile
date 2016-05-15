@@ -1,4 +1,4 @@
-AL_BASENAMES = al_obj al_pv al_region al_osctime al_type al_osc al_strfmt al_time al_atom al_list
+AL_BASENAMES = al_obj al_pv al_region al_osctime al_type al_osc al_strfmt al_time al_atom al_list al_alist
 
 
 AL_CFILES = $(foreach F, $(AL_BASENAMES), $(F).c) 

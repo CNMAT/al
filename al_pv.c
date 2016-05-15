@@ -986,6 +986,15 @@ al_pv2 *al_pv2_alloc(al_region r, void (*freefn)(void *))
 	AL_PV_ENTER
 	AL_PV_RETURN_OBJ(_al_pv2_alloc(r, al_pv_alloc(r, freefn), al_pv_alloc(r, freefn)), al_pv_printRefCount);
 }
+
+void al_pv2_print(al_region r, al_pv2 *pv2)
+{
+	if(pv2){
+		al_pv_print(pv2->head);
+		al_pv_print(pv2->tail);
+	}
+}
+
 /*
 void al_pv2_release(al_pv2 *pvec2)
 {

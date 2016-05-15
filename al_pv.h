@@ -48,6 +48,7 @@ al_pv2 *al_pv2_popLast(al_region r, al_pv2 *pvec2);
 int al_pv2_length(al_pv2 *pvec2);
 
 void al_pv_print(al_pv *pvec);
+void al_pv2_print(al_region r, al_pv2 *pv2);
 
 #ifdef __cplusplus
 }

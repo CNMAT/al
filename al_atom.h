@@ -12,6 +12,8 @@ extern "C" {
 #include "al_type.h"
 #include "al_time.h"
 
+typedef al_obj al_atom;
+
 al_obj al_atom_copy(al_region r, al_obj b);
 
 al_obj al_atom_isIndexable(al_region r, al_obj b);
@@ -78,6 +80,9 @@ int cal_atom_eqv(al_region r, al_obj b1, al_obj b2);
 int cal_atom_isInt(al_region r, al_obj a);
 int cal_atom_isFloat(al_region r, al_obj a);
 al_c_int32 cal_atom_strcmp(al_region r, al_obj s1, al_obj s2);
+
+int cal_atom_print(al_region r, al_obj a);
+int cal_atom_println(al_region r, al_obj a);
 
 #ifdef __cplusplus
 }

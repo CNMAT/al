@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 #include "al_atom.h"
 #include "al_type.h"
@@ -7,7 +8,7 @@ static al_obj cal_atom_alloc(al_region r, al_osc value);
 
 al_obj al_atom_copy(al_region r, al_obj b)
 {
-	if(cal_obj_getType(r, b) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, b) == AL_OBJ_TYPE_ATOM){
 		return cal_atom_alloc(r, al_osc_copy(r, cal_obj_getObj(r, b)));
 	}else{
 		return al_obj_copy(r, b);
@@ -16,7 +17,7 @@ al_obj al_atom_copy(al_region r, al_obj b)
 
 al_obj al_atom_isIndexable(al_region r, al_obj b)
 {
-	if(cal_obj_getType(r, b) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, b) == AL_OBJ_TYPE_ATOM){
 		int ret = cal_atom_isIndexable(r, b);
 		if(ret == 1){
 			return cal_atom_true(r);
@@ -32,8 +33,8 @@ al_obj al_atom_isIndexable(al_region r, al_obj b)
 
 al_obj al_atom_nth(al_region r, al_obj b, al_obj n)
 {
-	if(cal_obj_getType(r, b) == AL_OBJ_ATOM){
-		al_c_int32 i = cal_atom_getInt32(r, b);
+	if(cal_obj_getType(r, b) == AL_OBJ_TYPE_ATOM){
+		al_c_int32 i = cal_atom_getInt32(r, n);
 		if(al_c_error(i)){
 			return cal_atom_int8(r, 0);
 		}else{
@@ -46,7 +47,7 @@ al_obj al_atom_nth(al_region r, al_obj b, al_obj n)
 
 al_obj al_atom_rest(al_region r, al_obj b)
 {
-	if(cal_obj_getType(r, b) == AL_OBJ_ATOM && cal_atom_isIndexable(r, b)){
+	if(cal_obj_getType(r, b) == AL_OBJ_TYPE_ATOM && cal_atom_isIndexable(r, b)){
 		switch(cal_atom_getType(r, b)){
 		case AL_TYPE_STR:
 			{
@@ -87,7 +88,7 @@ al_obj al_atom_rest(al_region r, al_obj b)
 
 al_obj al_atom_length(al_region r, al_obj b)
 {
-	if(cal_obj_getType(r, b) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, b) == AL_OBJ_TYPE_ATOM){
 		return cal_atom_int32(r, cal_atom_length(r, b));
 	}
 	return al_obj_length(r, b);
@@ -95,7 +96,7 @@ al_obj al_atom_length(al_region r, al_obj b)
 
 al_obj al_atom_eql(al_region r, al_obj b1, al_obj b2)
 {
-	if(cal_obj_getType(r, b1) == AL_OBJ_ATOM && cal_obj_getType(r, b2) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, b1) == AL_OBJ_TYPE_ATOM && cal_obj_getType(r, b2) == AL_OBJ_TYPE_ATOM){
 		return cal_atom_unit(r, cal_atom_eql(r, b1, b2) == 0 ? AL_TYPE_FALSE : AL_TYPE_TRUE);
 	}
 	return al_obj_eql(r, b1, b2);
@@ -103,10 +104,19 @@ al_obj al_atom_eql(al_region r, al_obj b1, al_obj b2)
 
 al_obj al_atom_eqv(al_region r, al_obj b1, al_obj b2)
 {
-	if(cal_obj_getType(r, b1) == AL_OBJ_ATOM && cal_obj_getType(r, b2) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, b1) == AL_OBJ_TYPE_ATOM && cal_obj_getType(r, b2) == AL_OBJ_TYPE_ATOM){
 		return cal_atom_unit(r, cal_atom_eqv(r, b1, b2) == 0 ? AL_TYPE_FALSE : AL_TYPE_TRUE);
 	}
 	return al_obj_eqv(r, b1, b2);
+}
+
+al_obj al_atom_eval(al_region r, al_obj a, al_obj context)
+{
+	if(cal_obj_getType(r, a) == AL_OBJ_TYPE_ATOM){
+		return a;
+	}else{
+		return al_obj_eval(r, a, context);
+	}
 }
 
 //////////////////////////////////////////////////
@@ -115,7 +125,7 @@ al_obj al_atom_eqv(al_region r, al_obj b1, al_obj b2)
 
 al_obj al_atom_isInt(al_region r, al_obj a)
 {
-	if(cal_obj_getType(r, a) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, a) == AL_OBJ_TYPE_ATOM){
 		return cal_atom_unit(r, cal_atom_isInt(r, a) == 0 ? AL_TYPE_FALSE : AL_TYPE_TRUE);
 	}else{
 		return cal_atom_false(r);
@@ -124,7 +134,7 @@ al_obj al_atom_isInt(al_region r, al_obj a)
 
 al_obj al_atom_isFloat(al_region r, al_obj a)
 {
-	if(cal_obj_getType(r, a) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, a) == AL_OBJ_TYPE_ATOM){
 		return cal_atom_unit(r, cal_atom_isFloat(r, a) == 0 ? AL_TYPE_FALSE : AL_TYPE_TRUE);
 	}else{
 		return cal_atom_false(r);
@@ -133,7 +143,7 @@ al_obj al_atom_isFloat(al_region r, al_obj a)
 
 al_obj al_atom_add(al_region r, al_obj lhs, al_obj rhs)
 {
-	if(cal_obj_getType(r, lhs) == AL_OBJ_ATOM && cal_obj_getType(r, rhs) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, lhs) == AL_OBJ_TYPE_ATOM && cal_obj_getType(r, rhs) == AL_OBJ_TYPE_ATOM){
 		return cal_atom_alloc(r, al_osc_add(r, cal_obj_getObj(r, lhs), cal_obj_getObj(r, rhs)));
 	}
 	return cal_atom_nil(r);
@@ -144,12 +154,12 @@ al_obj al_atom_add(al_region r, al_obj lhs, al_obj rhs)
 //////////////////////////////////////////////////
 static al_obj cal_atom_alloc(al_region r, al_osc value)
 {
-	return cal_obj_alloc(r, value, AL_OBJ_ATOM);
+	return cal_obj_alloc(r, value, AL_OBJ_TYPE_ATOM);
 }
 
 size_t cal_atom_nformat(al_region r, char *s, size_t n, al_obj b)
 {
-	if(cal_obj_getType(r, b) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, b) == AL_OBJ_TYPE_ATOM){
 		return al_osc_nformat(r, s, n, cal_obj_getObj(r, b));
 	}
 	return 0;
@@ -157,7 +167,7 @@ size_t cal_atom_nformat(al_region r, char *s, size_t n, al_obj b)
 
 al_type cal_atom_getType(al_region r, al_obj v)
 {
-	if(cal_obj_getType(r, v) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, v) == AL_OBJ_TYPE_ATOM){
 		return al_osc_getType(r, cal_obj_getObj(r, v));
 	}else{
 		return cal_obj_getType(r, v);
@@ -261,7 +271,7 @@ al_obj cal_atom_fn(al_region r, al_c_fnptr fn, char *name)
 
 al_c_int8 cal_atom_getInt8(al_region r, al_obj v)
 {
-	if(cal_obj_getType(r, v) == AL_OBJ_ATOM && cal_atom_getType(r, v) == AL_TYPE_I8){
+	if(cal_obj_getType(r, v) == AL_OBJ_TYPE_ATOM && cal_atom_getType(r, v) == AL_TYPE_I8){
 		return al_osc_getInt8(r, cal_obj_getObj(r, v));
 	}
 	return al_c_create(int8, 0, 1);
@@ -269,7 +279,7 @@ al_c_int8 cal_atom_getInt8(al_region r, al_obj v)
 
 al_c_uint8 cal_atom_getUInt8(al_region r, al_obj v)
 {
-	if(cal_obj_getType(r, v) == AL_OBJ_ATOM && cal_atom_getType(r, v) == AL_TYPE_U8){
+	if(cal_obj_getType(r, v) == AL_OBJ_TYPE_ATOM && cal_atom_getType(r, v) == AL_TYPE_U8){
 		return al_osc_getUInt8(r, cal_obj_getObj(r, v));
 	}
 	return al_c_create(uint8, 0, 1);
@@ -277,7 +287,7 @@ al_c_uint8 cal_atom_getUInt8(al_region r, al_obj v)
 
 al_c_int16 cal_atom_getInt16(al_region r, al_obj v)
 {
-	if(cal_obj_getType(r, v) == AL_OBJ_ATOM && cal_atom_getType(r, v) == AL_TYPE_I16){
+	if(cal_obj_getType(r, v) == AL_OBJ_TYPE_ATOM && cal_atom_getType(r, v) == AL_TYPE_I16){
 		return al_osc_getInt16(r, cal_obj_getObj(r, v));
 	}
 	return al_c_create(int16, 0, 1);
@@ -285,7 +295,7 @@ al_c_int16 cal_atom_getInt16(al_region r, al_obj v)
 
 al_c_uint16 cal_atom_getUInt16(al_region r, al_obj v)
 {
-	if(cal_obj_getType(r, v) == AL_OBJ_ATOM && cal_atom_getType(r, v) == AL_TYPE_U16){
+	if(cal_obj_getType(r, v) == AL_OBJ_TYPE_ATOM && cal_atom_getType(r, v) == AL_TYPE_U16){
 		return al_osc_getUInt16(r, cal_obj_getObj(r, v));
 	}
 	return al_c_create(uint16, 0, 1);
@@ -293,7 +303,7 @@ al_c_uint16 cal_atom_getUInt16(al_region r, al_obj v)
 
 al_c_int32 cal_atom_getInt32(al_region r, al_obj v)
 {
-	if(cal_obj_getType(r, v) == AL_OBJ_ATOM && cal_atom_getType(r, v) == AL_TYPE_I32){
+	if(cal_obj_getType(r, v) == AL_OBJ_TYPE_ATOM && cal_atom_getType(r, v) == AL_TYPE_I32){
 		return al_osc_getInt32(r, cal_obj_getObj(r, v));
 	}
 	return al_c_create(int32, 0, 1);
@@ -301,7 +311,7 @@ al_c_int32 cal_atom_getInt32(al_region r, al_obj v)
 
 al_c_uint32 cal_atom_getUInt32(al_region r, al_obj v)
 {
-	if(cal_obj_getType(r, v) == AL_OBJ_ATOM && cal_atom_getType(r, v) == AL_TYPE_U32){
+	if(cal_obj_getType(r, v) == AL_OBJ_TYPE_ATOM && cal_atom_getType(r, v) == AL_TYPE_U32){
 		return al_osc_getUInt32(r, cal_obj_getObj(r, v));
 	}
 	return al_c_create(uint32, 0, 1);
@@ -309,7 +319,7 @@ al_c_uint32 cal_atom_getUInt32(al_region r, al_obj v)
 
 al_c_int64 cal_atom_getInt64(al_region r, al_obj v)
 {
-	if(cal_obj_getType(r, v) == AL_OBJ_ATOM && cal_atom_getType(r, v) == AL_TYPE_I64){
+	if(cal_obj_getType(r, v) == AL_OBJ_TYPE_ATOM && cal_atom_getType(r, v) == AL_TYPE_I64){
 		return al_osc_getInt64(r, cal_obj_getObj(r, v));
 	}
 	return al_c_create(int64, 0, 1);
@@ -317,7 +327,7 @@ al_c_int64 cal_atom_getInt64(al_region r, al_obj v)
 
 al_c_uint64 cal_atom_getUInt64(al_region r, al_obj v)
 {
-	if(cal_obj_getType(r, v) == AL_OBJ_ATOM && cal_atom_getType(r, v) == AL_TYPE_U64){
+	if(cal_obj_getType(r, v) == AL_OBJ_TYPE_ATOM && cal_atom_getType(r, v) == AL_TYPE_U64){
 		return al_osc_getUInt64(r, cal_obj_getObj(r, v));
 	}
 	return al_c_create(uint64, 0, 1);
@@ -325,7 +335,7 @@ al_c_uint64 cal_atom_getUInt64(al_region r, al_obj v)
 
 al_c_float cal_atom_getFloat(al_region r, al_obj v)
 {
-	if(cal_obj_getType(r, v) == AL_OBJ_ATOM && cal_atom_getType(r, v) == AL_TYPE_F32){
+	if(cal_obj_getType(r, v) == AL_OBJ_TYPE_ATOM && cal_atom_getType(r, v) == AL_TYPE_F32){
 		return al_osc_getFloat(r, cal_obj_getObj(r, v));
 	}
 	return al_c_create(float, 0, 1);
@@ -333,7 +343,7 @@ al_c_float cal_atom_getFloat(al_region r, al_obj v)
 
 al_c_double cal_atom_getDouble(al_region r, al_obj v)
 {
-	if(cal_obj_getType(r, v) == AL_OBJ_ATOM && cal_atom_getType(r, v) == AL_TYPE_F64){
+	if(cal_obj_getType(r, v) == AL_OBJ_TYPE_ATOM && cal_atom_getType(r, v) == AL_TYPE_F64){
 		return al_osc_getDouble(r, cal_obj_getObj(r, v));
 	}
 	return al_c_create(double, 0, 1);
@@ -341,7 +351,7 @@ al_c_double cal_atom_getDouble(al_region r, al_obj v)
 
 al_c_ptr cal_atom_getPtr(al_region r, al_obj v)
 {
-	if(cal_obj_getType(r, v) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, v) == AL_OBJ_TYPE_ATOM){
 		if(cal_atom_getType(r, v) == AL_TYPE_STR ||
 	    	   cal_atom_getType(r, v) == AL_TYPE_SYM ||
 		   cal_atom_getType(r, v) == AL_TYPE_BLOB){
@@ -353,7 +363,7 @@ al_c_ptr cal_atom_getPtr(al_region r, al_obj v)
 
 al_c_fn cal_atom_getFn(al_region r, al_obj v)
 {
-	if(cal_obj_getType(r, v) == AL_OBJ_ATOM && cal_atom_getType(r, v) == AL_TYPE_FN){
+	if(cal_obj_getType(r, v) == AL_OBJ_TYPE_ATOM && cal_atom_getType(r, v) == AL_TYPE_FN){
 		return al_osc_getFn(r, cal_obj_getObj(r, v));
 	}
 	return al_c_create(fn, 0, 1);
@@ -361,7 +371,7 @@ al_c_fn cal_atom_getFn(al_region r, al_obj v)
 
 al_c_ptr cal_atom_getFnName(al_region r, al_obj v)
 {
-	if(cal_obj_getType(r, v) == AL_OBJ_ATOM && cal_atom_getType(r, v) == AL_TYPE_FN){
+	if(cal_obj_getType(r, v) == AL_OBJ_TYPE_ATOM && cal_atom_getType(r, v) == AL_TYPE_FN){
 		return al_osc_getFnName(r, cal_obj_getObj(r, v));
 	}
 	return al_c_create(ptr, 0, 1);
@@ -369,7 +379,7 @@ al_c_ptr cal_atom_getFnName(al_region r, al_obj v)
 
 al_obj cal_atom_convert(al_region r, al_obj b, char newtype)
 {
-	if(cal_obj_getType(r, b) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, b) == AL_OBJ_TYPE_ATOM){
 		return cal_atom_alloc(r, al_osc_convert(r, cal_obj_getObj(r, b), newtype));
 	}
 	return b;
@@ -377,7 +387,7 @@ al_obj cal_atom_convert(al_region r, al_obj b, char newtype)
 
 int cal_atom_isIndexable(al_region r, al_obj b)
 {
-	if(cal_obj_getType(r, b) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, b) == AL_OBJ_TYPE_ATOM){
 		return -1;
 	}
 	switch(cal_atom_getType(r, b)){
@@ -424,7 +434,7 @@ char cal_atom_nth(al_region r, al_obj b, int i)
 
 int cal_atom_length(al_region r, al_obj b)
 {
-	if(cal_obj_getType(r, b) != AL_OBJ_ATOM){
+	if(cal_obj_getType(r, b) != AL_OBJ_TYPE_ATOM){
 		return 0;
 	}
 	switch(cal_atom_getType(r, b)){
@@ -453,7 +463,7 @@ int cal_atom_length(al_region r, al_obj b)
 
 int cal_atom_isInt(al_region r, al_obj a)
 {
-	if(cal_obj_getType(r, a) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, a) == AL_OBJ_TYPE_ATOM){
 		return AL_TYPE_ISINT(cal_atom_getType(r, a));
 	}else{
 		return 0;
@@ -462,7 +472,7 @@ int cal_atom_isInt(al_region r, al_obj a)
 
 int cal_atom_isFloat(al_region r, al_obj a)
 {
-	if(cal_obj_getType(r, a) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, a) == AL_OBJ_TYPE_ATOM){
 		return AL_TYPE_ISFLOAT(cal_atom_getType(r, a));
 	}else{
 		return 0;
@@ -471,7 +481,7 @@ int cal_atom_isFloat(al_region r, al_obj a)
 
 int cal_atom_eql(al_region r, al_obj b1, al_obj b2)
 {
-	if(cal_obj_getType(r, b1) == AL_OBJ_ATOM && cal_obj_getType(r, b2) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, b1) == AL_OBJ_TYPE_ATOM && cal_obj_getType(r, b2) == AL_OBJ_TYPE_ATOM){
 		return al_osc_eql(r, cal_obj_getObj(r, b1), cal_obj_getObj(r, b2));
 	}
 	return 0;
@@ -479,7 +489,7 @@ int cal_atom_eql(al_region r, al_obj b1, al_obj b2)
 
 int cal_atom_eqv(al_region r, al_obj b1, al_obj b2)
 {
-	if(cal_obj_getType(r, b1) == AL_OBJ_ATOM && cal_obj_getType(r, b2) == AL_OBJ_ATOM){
+	if(cal_obj_getType(r, b1) == AL_OBJ_TYPE_ATOM && cal_obj_getType(r, b2) == AL_OBJ_TYPE_ATOM){
 		return al_osc_eqv(r, cal_obj_getObj(r, b1), cal_obj_getObj(r, b2));
 	}
 	return 0;
@@ -487,7 +497,7 @@ int cal_atom_eqv(al_region r, al_obj b1, al_obj b2)
 
 al_c_int32 cal_atom_strcmp(al_region r, al_obj s1, al_obj s2)
 {
-	if(cal_obj_getType(r, s1) != AL_OBJ_ATOM && cal_obj_getType(r, s2) != AL_OBJ_ATOM){
+	if(cal_obj_getType(r, s1) != AL_OBJ_TYPE_ATOM && cal_obj_getType(r, s2) != AL_OBJ_TYPE_ATOM){
 		return al_c_create(int32, 0, 1);
 	}
 	char tt1 = cal_atom_getType(r, s1);
@@ -502,4 +512,20 @@ al_c_int32 cal_atom_strcmp(al_region r, al_obj s1, al_obj s2)
 		return al_c_create(int32, -1, 1);
 	}
 	return al_c_create(int32, strcmp(al_c_value(cal_atom_getPtr(r, s1)), al_c_value(cal_atom_getPtr(r, s2))), 0);
+}
+
+int cal_atom_print(al_region r, al_obj a)
+{
+	if(cal_obj_getType(r, a) == AL_OBJ_TYPE_ATOM){
+		size_t l = cal_atom_nformat(r, NULL, 0, a);
+		char buf[l + 1];
+		cal_atom_nformat(r, buf, l + 1, a);
+		return printf("%s", buf);
+	}
+	return 0;
+}
+
+int cal_atom_println(al_region r, al_obj a)
+{
+	return cal_atom_print(r, a) + printf("\n");
 }
