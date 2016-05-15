@@ -8,7 +8,6 @@ extern "C" {
 #include <stdlib.h>
 
 #define AL_REGION_DEFAULT_STACK_SIZE_BYTES 1000000
-#define AL_REGION_DEFAULT_TMP_STACK_SIZE_BYTES 256000
 
 struct _al_region
 {

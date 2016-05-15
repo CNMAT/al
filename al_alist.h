@@ -8,7 +8,7 @@ extern "C" {
 #include "al_obj.h"
 #include "al_region.h"
 
-
+typedef al_obj al_alist;
 
 al_obj al_alist_copy(al_region r, al_obj a);
 al_obj al_alist_isIndexable(al_region r, al_obj a);

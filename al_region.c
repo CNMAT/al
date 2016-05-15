@@ -1,6 +1,8 @@
 #include <string.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include "al_region.h"
+#include "al_alist.h"
 
 #define AL_REGION_PRINTF_WARNING
 
@@ -65,3 +67,4 @@ size_t al_region_bytesFree(al_region r)
 {
 	return r->stacksize - (r->stackptr - r->stack);
 }
+

@@ -4,6 +4,7 @@
 #include "al_list.h"
 #include "al_alist.h"
 #include "al_region.h"
+#include "al_env.h"
 
 int main(int ac, char **av)
 {
@@ -83,7 +84,6 @@ int main(int ac, char **av)
 	}
 	printf("**************************************************\n");
 	{
-		printf("union with lhs\n");
 		al_obj al1 = cal_alist_alloc(r, 2, cal_list_alloc(r, 2, cal_atom_symbol(r, "hi"), cal_atom_float(r, 33.6)), cal_list_alloc(r, 2, cal_atom_symbol(r, "there"), cal_atom_double(r, 66.3)));
 		al_obj al2 = cal_alist_alloc(r, 2, cal_list_alloc(r, 2, cal_atom_symbol(r, "sucka"), cal_atom_true(r)), cal_list_alloc(r, 2, cal_atom_symbol(r, "hi"), cal_atom_double(r, 66.3)));
 		al_obj app = cal_list_alloc(r, 2, cal_atom_symbol(r, "@"), cal_atom_symbol(r, "@"));
@@ -112,6 +112,5 @@ int main(int ac, char **av)
 	}
 
 	//printf("used %lu bytes, %lu bytes free\n", al_region_bytesUsed(r), al_region_bytesFree(r));
-	
 	return 0;
 }
