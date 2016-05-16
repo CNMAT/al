@@ -125,10 +125,10 @@ void al_osctime_htont(al_region region, al_osctime t, char *buf)
 	*((uint32_t *)p2) = hton32(*((uint32_t *)ttp2));
 }
 
-char *al_osctime_toISO8601(al_region r, al_osctime t)
+char *al_osctime_toISO8601(al_region region, al_osctime t)
 {
 	long l = _al_osctime_toISO8601(NULL, 0, t) + 1;
-	char *buf = al_region_getBytes(r, l);
+	char *buf = al_region_getBytes(region, l);
 	_al_osctime_toISO8601(buf, l, t);
 	return buf;
 }

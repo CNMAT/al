@@ -3,114 +3,109 @@
 #include "al_atom.h"
 #include "al_list.h"
 #include "al_alist.h"
-#include "al_region.h"
 #include "al_env.h"
+#define __OSC_PROFILE__
+#include "../libo/osc_profile.h"
 
 int main(int ac, char **av)
 {
-	al_region r = al_region_allocWithBytes(1000000, (char *)malloc(1000000));
-	char *p = al_region_getPtr(r);
+	al_env env = al_env_create(1000000, (char *)malloc(1000000), NULL);
+	OSC_PROFILE_TIMER_START(foo);
 	{
 		// nth on this
-		al_obj app = cal_list_alloc(r, 2, cal_atom_symbol(r, "@"), cal_atom_symbol(r, "@"));
-		al_obj lhs = cal_list_alloc(r, 1, cal_atom_symbol(r, "lhs"));
-		al_obj rhs = cal_list_alloc(r, 2, cal_atom_symbol(r, "rhs"), cal_atom_int32(r, 0));
-		al_obj al = cal_alist_alloc(r, 3, app, lhs, rhs);
+		al_obj app = cal_list_alloc(env, 2, cal_atom_symbol(env, "@"), cal_atom_symbol(env, "@"));
+		al_obj lhs = cal_list_alloc(env, 1, cal_atom_symbol(env, "lhs"));
+		al_obj rhs = cal_list_alloc(env, 2, cal_atom_symbol(env, "rhs"), cal_atom_int32(env, 0));
+		al_obj al = cal_alist_alloc(env, 3, app, lhs, rhs);
 
-		al_obj proglist = cal_list_alloc(r, 2, cal_atom_symbol(r, "prog"), al);
-		al_obj prog = cal_alist_alloc(r, 1, proglist);
-		al_obj e = al_obj_eval(r, prog, AL_OBJ_NULL);
-		cal_obj_println(r, e);
-		al_region_setPtr(r, p);
+		al_obj proglist = cal_list_alloc(env, 2, cal_atom_symbol(env, "prog"), al);
+		al_obj prog = cal_alist_alloc(env, 1, proglist);
+		al_obj e = al_obj_eval(env, prog, AL_OBJ_NULL);
+		//cal_obj_println(env, e);
 	}
-	printf("**************************************************\n");
+	//printf("**************************************************\n");
 	{
 		// nth on string
-		al_obj app = cal_list_alloc(r, 2, cal_atom_symbol(r, "@"), cal_atom_symbol(r, "@"));
-		al_obj lhs = cal_list_alloc(r, 2, cal_atom_symbol(r, "lhs"), cal_atom_string(r, "fo0"));
-		al_obj rhs = cal_list_alloc(r, 2, cal_atom_symbol(r, "rhs"), cal_atom_int32(r, 1));
-		al_obj al = cal_alist_alloc(r, 3, app, lhs, rhs);
+		al_obj app = cal_list_alloc(env, 2, cal_atom_symbol(env, "@"), cal_atom_symbol(env, "@"));
+		al_obj lhs = cal_list_alloc(env, 2, cal_atom_symbol(env, "lhs"), cal_atom_string(env, "fo0"));
+		al_obj rhs = cal_list_alloc(env, 2, cal_atom_symbol(env, "rhs"), cal_atom_int32(env, 1));
+		al_obj al = cal_alist_alloc(env, 3, app, lhs, rhs);
 
-		al_obj proglist = cal_list_alloc(r, 2, cal_atom_symbol(r, "prog"), al);
-		al_obj prog = cal_alist_alloc(r, 1, proglist);
-		al_obj e = al_obj_eval(r, prog, AL_OBJ_NULL);
-		cal_obj_println(r, e);
-		al_region_setPtr(r, p);
+		al_obj proglist = cal_list_alloc(env, 2, cal_atom_symbol(env, "prog"), al);
+		al_obj prog = cal_alist_alloc(env, 1, proglist);
+		al_obj e = al_obj_eval(env, prog, AL_OBJ_NULL);
+		//cal_obj_println(env, e);
 	}
-	printf("**************************************************\n");
+	//printf("**************************************************\n");
 	{
 		// lookup in context
-		al_obj app = cal_list_alloc(r, 2, cal_atom_symbol(r, "@"), cal_atom_symbol(r, "@"));
-		al_obj lhs = cal_list_alloc(r, 1, cal_atom_symbol(r, "lhs"));
-		al_obj rhs = cal_list_alloc(r, 2, cal_atom_symbol(r, "rhs"), cal_atom_symbol(r, "this"));
-		al_obj al = cal_alist_alloc(r, 3, app, lhs, rhs);
+		al_obj app = cal_list_alloc(env, 2, cal_atom_symbol(env, "@"), cal_atom_symbol(env, "@"));
+		al_obj lhs = cal_list_alloc(env, 1, cal_atom_symbol(env, "lhs"));
+		al_obj rhs = cal_list_alloc(env, 2, cal_atom_symbol(env, "rhs"), cal_atom_symbol(env, "this"));
+		al_obj al = cal_alist_alloc(env, 3, app, lhs, rhs);
 
-		al_obj proglist = cal_list_alloc(r, 2, cal_atom_symbol(r, "prog"), al);
-		al_obj prog = cal_alist_alloc(r, 1, proglist);
-		al_obj e = al_obj_eval(r, prog, AL_OBJ_NULL);
-		cal_obj_println(r, e);
-		al_region_setPtr(r, p);
+		al_obj proglist = cal_list_alloc(env, 2, cal_atom_symbol(env, "prog"), al);
+		al_obj prog = cal_alist_alloc(env, 1, proglist);
+		al_obj e = al_obj_eval(env, prog, AL_OBJ_NULL);
+		//cal_obj_println(env, e);
 	}
-	printf("**************************************************\n");
+	//printf("**************************************************\n");
 	{
 		// lookup in lhs
-		al_obj fn = cal_alist_alloc(r, 2, cal_list_alloc(r, 2, cal_atom_symbol(r, "hi"), cal_atom_float(r, 33.6)), cal_list_alloc(r, 2, cal_atom_symbol(r, "there"), cal_atom_double(r, 66.3)));
-		al_obj app = cal_list_alloc(r, 2, cal_atom_symbol(r, "@"), cal_atom_symbol(r, "@"));
-		al_obj lhs = cal_list_alloc(r, 2, cal_atom_symbol(r, "lhs"), fn);
-		al_obj rhs = cal_list_alloc(r, 2, cal_atom_symbol(r, "rhs"), cal_atom_symbol(r, "hi"));
-		al_obj al = cal_alist_alloc(r, 3, app, lhs, rhs);
+		al_obj fn = cal_alist_alloc(env, 2, cal_list_alloc(env, 2, cal_atom_symbol(env, "hi"), cal_atom_float(env, 33.6)), cal_list_alloc(env, 2, cal_atom_symbol(env, "there"), cal_atom_double(env, 66.3)));
+		al_obj app = cal_list_alloc(env, 2, cal_atom_symbol(env, "@"), cal_atom_symbol(env, "@"));
+		al_obj lhs = cal_list_alloc(env, 2, cal_atom_symbol(env, "lhs"), fn);
+		al_obj rhs = cal_list_alloc(env, 2, cal_atom_symbol(env, "rhs"), cal_atom_symbol(env, "hi"));
+		al_obj al = cal_alist_alloc(env, 3, app, lhs, rhs);
 
-		al_obj proglist = cal_list_alloc(r, 2, cal_atom_symbol(r, "prog"), al);
-		al_obj prog = cal_alist_alloc(r, 1, proglist);
-		al_obj e = al_obj_eval(r, prog, AL_OBJ_NULL);
-		cal_obj_println(r, e);
-		al_region_setPtr(r, p);
+		al_obj proglist = cal_list_alloc(env, 2, cal_atom_symbol(env, "prog"), al);
+		al_obj prog = cal_alist_alloc(env, 1, proglist);
+		al_obj e = al_obj_eval(env, prog, AL_OBJ_NULL);
+		//cal_obj_println(env, e);
 	}
-	printf("**************************************************\n");
+	//printf("**************************************************\n");
 	{
 		// union with this
-		//al_obj al1 = cal_alist_alloc(r, 2, cal_list_alloc(r, 2, cal_atom_symbol(r, "hi"), cal_atom_float(r, 33.6)), cal_list_alloc(r, 2, cal_atom_symbol(r, "there"), cal_atom_double(r, 66.3)));
-		al_obj al2 = cal_alist_alloc(r, 2, cal_list_alloc(r, 2, cal_atom_symbol(r, "sucka"), cal_atom_true(r)), cal_list_alloc(r, 2, cal_atom_symbol(r, "hi"), cal_atom_double(r, 66.3)));
-		al_obj app = cal_list_alloc(r, 2, cal_atom_symbol(r, "@"), cal_atom_symbol(r, "@"));
-		al_obj lhs = cal_list_alloc(r, 1, cal_atom_symbol(r, "lhs"));
-		al_obj rhs = cal_list_alloc(r, 2, cal_atom_symbol(r, "rhs"), al2);
-		al_obj al = cal_alist_alloc(r, 3, app, lhs, rhs);
+		//al_obj al1 = cal_alist_alloc(env, 2, cal_list_alloc(env, 2, cal_atom_symbol(env, "hi"), cal_atom_float(env, 33.6)), cal_list_alloc(env, 2, cal_atom_symbol(env, "there"), cal_atom_double(env, 66.3)));
+		al_obj al2 = cal_alist_alloc(env, 2, cal_list_alloc(env, 2, cal_atom_symbol(env, "sucka"), cal_atom_true(env)), cal_list_alloc(env, 2, cal_atom_symbol(env, "hi"), cal_atom_double(env, 66.3)));
+		al_obj app = cal_list_alloc(env, 2, cal_atom_symbol(env, "@"), cal_atom_symbol(env, "@"));
+		al_obj lhs = cal_list_alloc(env, 1, cal_atom_symbol(env, "lhs"));
+		al_obj rhs = cal_list_alloc(env, 2, cal_atom_symbol(env, "rhs"), al2);
+		al_obj al = cal_alist_alloc(env, 3, app, lhs, rhs);
 
-		al_obj proglist = cal_list_alloc(r, 2, cal_atom_symbol(r, "prog"), al);
-		al_obj prog = cal_alist_alloc(r, 1, proglist);
-		al_obj e = al_obj_eval(r, prog, AL_OBJ_NULL);
-		cal_obj_println(r, e);
-		al_region_setPtr(r, p);
+		al_obj proglist = cal_list_alloc(env, 2, cal_atom_symbol(env, "prog"), al);
+		al_obj prog = cal_alist_alloc(env, 1, proglist);
+		al_obj e = al_obj_eval(env, prog, AL_OBJ_NULL);
+		//cal_obj_println(env, e);
 	}
-	printf("**************************************************\n");
+	//printf("**************************************************\n");
 	{
-		al_obj al1 = cal_alist_alloc(r, 2, cal_list_alloc(r, 2, cal_atom_symbol(r, "hi"), cal_atom_float(r, 33.6)), cal_list_alloc(r, 2, cal_atom_symbol(r, "there"), cal_atom_double(r, 66.3)));
-		al_obj al2 = cal_alist_alloc(r, 2, cal_list_alloc(r, 2, cal_atom_symbol(r, "sucka"), cal_atom_true(r)), cal_list_alloc(r, 2, cal_atom_symbol(r, "hi"), cal_atom_double(r, 66.3)));
-		al_obj app = cal_list_alloc(r, 2, cal_atom_symbol(r, "@"), cal_atom_symbol(r, "@"));
-		al_obj lhs = cal_list_alloc(r, 2, cal_atom_symbol(r, "lhs"), al1);
-		al_obj rhs = cal_list_alloc(r, 2, cal_atom_symbol(r, "rhs"), al2);
-		al_obj al = cal_alist_alloc(r, 3, app, lhs, rhs);
+		al_obj al1 = cal_alist_alloc(env, 2, cal_list_alloc(env, 2, cal_atom_symbol(env, "hi"), cal_atom_float(env, 33.6)), cal_list_alloc(env, 2, cal_atom_symbol(env, "there"), cal_atom_double(env, 66.3)));
+		al_obj al2 = cal_alist_alloc(env, 2, cal_list_alloc(env, 2, cal_atom_symbol(env, "sucka"), cal_atom_true(env)), cal_list_alloc(env, 2, cal_atom_symbol(env, "hi"), cal_atom_double(env, 66.3)));
+		al_obj app = cal_list_alloc(env, 2, cal_atom_symbol(env, "@"), cal_atom_symbol(env, "@"));
+		al_obj lhs = cal_list_alloc(env, 2, cal_atom_symbol(env, "lhs"), al1);
+		al_obj rhs = cal_list_alloc(env, 2, cal_atom_symbol(env, "rhs"), al2);
+		al_obj al = cal_alist_alloc(env, 3, app, lhs, rhs);
 
-		al_obj proglist = cal_list_alloc(r, 2, cal_atom_symbol(r, "prog"), al);
-		al_obj prog = cal_alist_alloc(r, 1, proglist);
-		al_obj e = al_obj_eval(r, prog, AL_OBJ_NULL);
-		cal_obj_println(r, e);
-		al_region_setPtr(r, p);
+		al_obj proglist = cal_list_alloc(env, 2, cal_atom_symbol(env, "prog"), al);
+		al_obj prog = cal_alist_alloc(env, 1, proglist);
+		al_obj e = al_obj_eval(env, prog, AL_OBJ_NULL);
+		//cal_obj_println(env, e);
 	}
-	printf("**************************************************\n");
+	//printf("**************************************************\n");
 	{
-		al_obj app = cal_list_alloc(r, 2, cal_atom_symbol(r, "@"), cal_atom_symbol(r, "@"));
-		al_obj lhs = cal_list_alloc(r, 4, cal_atom_symbol(r, "lhs"), cal_atom_int32(r, 1), cal_atom_int32(r, 2), cal_atom_int32(r, 3));
-		al_obj rhs = cal_list_alloc(r, 2, cal_atom_symbol(r, "rhs"), cal_atom_int32(r, 1));
-		al_obj al = cal_alist_alloc(r, 3, app, lhs, rhs);
+		al_obj app = cal_list_alloc(env, 2, cal_atom_symbol(env, "@"), cal_atom_symbol(env, "@"));
+		al_obj lhs = cal_list_alloc(env, 4, cal_atom_symbol(env, "lhs"), cal_atom_int32(env, 1), cal_atom_int32(env, 2), cal_atom_int32(env, 3));
+		al_obj rhs = cal_list_alloc(env, 2, cal_atom_symbol(env, "rhs"), cal_atom_int32(env, 1));
+		al_obj al = cal_alist_alloc(env, 3, app, lhs, rhs);
 
-		al_obj proglist = cal_list_alloc(r, 2, cal_atom_symbol(r, "prog"), al);
-		al_obj prog = cal_alist_alloc(r, 1, proglist);
-		al_obj e = al_obj_eval(r, prog, AL_OBJ_NULL);
-		cal_obj_println(r, e);
-		al_region_setPtr(r, p);
+		al_obj proglist = cal_list_alloc(env, 2, cal_atom_symbol(env, "prog"), al);
+		al_obj prog = cal_alist_alloc(env, 1, proglist);
+		al_obj e = al_obj_eval(env, prog, AL_OBJ_NULL);
+		//cal_obj_println(env, e);
 	}
-
-	//printf("used %lu bytes, %lu bytes free\n", al_region_bytesUsed(r), al_region_bytesFree(r));
+	OSC_PROFILE_TIMER_STOP(foo);
+	OSC_PROFILE_TIMER_PRINTF(foo);
+	////printf("used %lu bytes, %lu bytes free\n", al_region_bytesUsed(env), al_region_bytesFree(env));
 	return 0;
 }

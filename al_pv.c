@@ -54,7 +54,7 @@ void al_pv_ud_free(al_pv_ud *ud, void (*freefn)(void *));
 al_pv_ud *al_pv_ud_alloc(al_region r, void *userdata)
 {
 	AL_PV_ENTER;
-	al_pv_ud *ud = al_region_getBytes(r, sizeof(al_pv_ud));
+	al_pv_ud *ud = (al_pv_ud *)al_region_getBytes(r, sizeof(al_pv_ud));
 	if(ud){
 		ud->data = userdata;
 		ud->refcount = 1;
@@ -126,7 +126,7 @@ al_pv_node *al_pv_node_alloc(al_region r)
 al_pv_node *al_pv_node_allocWithArray(al_region r, int length, void **array)
 {
 	AL_PV_ENTER
-	al_pv_node *node = al_region_getBytes(r, sizeof(al_pv_node));
+	al_pv_node *node = (al_pv_node*)al_region_getBytes(r, sizeof(al_pv_node));
 	memset(node, 0, sizeof(al_pv_node));
 	if(array){
 		memcpy(node->array, array, length * sizeof(void *));
@@ -253,7 +253,7 @@ al_pv_node *al_pv_newPath_m(al_region r, int level, al_pv_node *node);
 al_pv *_al_pv_alloc(al_region r, int count, int shift, al_pv_node *root, int taillength, void **tail, void (*freefn)(void *))
 {
 	AL_PV_ENTER
-	al_pv *pvec = al_region_getBytes(r, sizeof(al_pv));
+	al_pv *pvec = (al_pv *)al_region_getBytes(r, sizeof(al_pv));
 	pvec->count = count;
 	pvec->shift = shift;
 	pvec->root = root;
@@ -971,7 +971,7 @@ void myfree(void *obj)
 
 al_pv2 *_al_pv2_alloc(al_region r, al_pv *head, al_pv *tail)
 {
-	al_pv2 *pvec2 = al_region_getBytes(r, sizeof(al_pv2));
+	al_pv2 *pvec2 = (al_pv2 *)al_region_getBytes(r, sizeof(al_pv2));
 	if(pvec2){
 		pvec2->refcount = 1;
 		pvec2->length = 0;

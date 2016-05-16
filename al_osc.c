@@ -1128,7 +1128,6 @@ int al_osc_eql(al_region r, al_osc n1, al_osc n2)
 
 int al_osc_eqv(al_region r, al_osc n1, al_osc n2)
 {
-	char *sp = al_region_getPtr(r);
 	char tt1 = al_osc_getType(r, n1);
 	char tt2 = al_osc_getType(r, n2);
 	char lub = al_type_findLUB(r, tt1, tt2);
@@ -1147,7 +1146,6 @@ int al_osc_eqv(al_region r, al_osc n1, al_osc n2)
 		_n2 = al_osc_convert(r, n2, lub);
 	}
 	int res = al_osc_eql(r, _n1, _n2);
-	al_region_setPtr(r, sp);
 	return res;
 }
 

@@ -19,16 +19,16 @@ typedef al_osctime_ntptime al_osctime;
 #define AL_OSCTIME_NULL (al_osctime){0, 0}
 #define AL_OSCTIME_IMMEDIATE (al_osctime){0, 1}
 
-al_osctime al_osctime_add(al_region region, al_osctime t1, al_osctime t2);
-al_osctime al_osctime_subtract(al_region region, al_osctime lhs, al_osctime rhs);
-int al_osctime_compare(al_region region, al_osctime t1, al_osctime t2);
-double al_osctime_toFloat(al_region region, al_osctime t);
-al_osctime al_osctime_fromFloat(al_region region, double f);
+al_osctime al_osctime_add(al_region r, al_osctime t1, al_osctime t2);
+al_osctime al_osctime_subtract(al_region r, al_osctime lhs, al_osctime rhs);
+int al_osctime_compare(al_region r, al_osctime t1, al_osctime t2);
+double al_osctime_toFloat(al_region r, al_osctime t);
+al_osctime al_osctime_fromFloat(al_region r, double f);
 char *al_osctime_toISO8601(al_region r, al_osctime t);
 size_t _al_osctime_toISO8601(char *buf, size_t n, al_osctime t);
-al_osctime al_osctime_fromISO8601(al_region region, char *s);
-al_osctime al_osctime_ntoht(al_region region, char *buf);
-void al_osctime_htont(al_region region, al_osctime t, char *buf);
+al_osctime al_osctime_fromISO8601(al_region r, char *s);
+al_osctime al_osctime_ntoht(al_region r, char *buf);
+void al_osctime_htont(al_region r, al_osctime t, char *buf);
 
 #ifdef __cplusplus
 }
