@@ -1,4 +1,4 @@
-AL_BASENAMES = al_obj al_pv al_region al_osctime al_type al_osc al_strfmt al_time al_atom al_list al_alist al_env al_boot
+AL_BASENAMES = al_obj al_pv al_region al_osctime al_type al_osc al_strfmt al_time al_atom al_list al_alist al_env al_boot al oscal_parse oscal_lex
 
 
 AL_CFILES = $(foreach F, $(AL_BASENAMES), $(F).c) 
@@ -90,6 +90,12 @@ libal.dylib: $(AL_OBJECTS)
 
 %.o: %.c 
 	$(CC) $(CFLAGS) $(I) -c -o $(basename $@).o $(basename $@).c
+
+oscal_lex.c: oscal_lex.l oscal_parse.c
+	flex -o $(basename $@).c --prefix=$(basename $@)_ --header-file=$(basename $@).h $(basename $@).l
+
+oscal_parse.c: oscal_parse.y
+	bison -p $(basename $@)_ -d -v --report=itemset -o $(basename $@).c $(basename $@).y
 
 # %_scanner.c: %_scanner.l %_parser.c
 # 	flex -o $(basename $@).c --prefix=$(basename $@)_ --header-file=$(basename $@).h $(basename $@).l

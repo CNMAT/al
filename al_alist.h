@@ -23,7 +23,10 @@ al_obj al_alist_union(al_env env, al_obj a1, al_obj a2);
 al_obj al_alist_intersection(al_env env, al_obj a1, al_obj a2);
 al_obj al_alist_rcomplement(al_env env, al_obj a1, al_obj a2);
 al_obj al_alist_apply(al_env env, al_obj fn, al_obj applicator, al_obj applicand, al_obj context);
+al_obj al_alist_getEntryPointVal(al_env env, al_obj entrypoint, al_obj key);
 al_obj cal_alist_getEntryPointVal(al_env env, al_obj entrypoint, char *key);
+al_obj cal_alist_bindArgs(al_env env, al_obj fn, al_obj context, ...);
+al_obj al_alist_makeApplication(al_env env, al_obj fn, al_obj applicator, al_obj arg);
 al_obj al_alist_eval(al_env env, al_obj al, al_obj context);
 
 //////////////////////////////////////////////////

@@ -115,6 +115,18 @@ al_obj al_obj_eval(al_env env, al_obj o, al_obj context)
 	}
 	return AL_OBJ_NULL;
 }
+/*
+al_obj al_obj_eval(al_env env, al_obj o, al_obj context)
+{
+	al_obj old = AL_OBJ_NULL;
+	al_obj new = o;
+	while(!cal_obj_eql(env, old, new)){
+		old = new;
+		new = _al_obj_eval(env, old, context);
+	}
+	return new;
+}
+*/
 
 //////////////////////////////////////////////////
 // C API

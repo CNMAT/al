@@ -28,7 +28,6 @@ extern "C" {
 #define AL_TYPE_ALIST 'B'
 #define AL_TYPE_FN 'n'
 
-typedef char al_type;
 char al_type_findLUB(al_region r, char t1, char t2);
 char al_type_isSubtype(al_region r, char t1, char t2);
 char *al_type_name(al_region r, char typetag);

@@ -71,7 +71,7 @@ al_c_ptr cal_atom_getPtr(al_env env, al_obj v);
 al_c_fn cal_atom_getFn(al_env env, al_obj v);
 al_c_ptr cal_atom_getFnName(al_env env, al_obj v);
 
-al_obj cal_atom_convert(al_env env, al_obj b, al_type newtype);
+al_obj cal_atom_convert(al_env env, al_obj b, char newtype);
 int cal_atom_isIndexable(al_env env, al_obj b);
 char cal_atom_nth(al_env env, al_obj b, int i);
 int cal_atom_length(al_env env, al_obj b);

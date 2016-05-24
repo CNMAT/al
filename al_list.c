@@ -101,7 +101,7 @@ al_obj al_list_eval(al_env env, al_obj l, al_obj context)
 	al_obj value = cal_atom_symbol(env, "value");
 	al_obj ll = cal_list_alloc(env, 0);
 	for(int j = 0; j < cal_list_length(env, l); j++){
-		al_obj e = al_alist_eval(env, cal_list_nth(env, l, j), context);
+		al_obj e = al_obj_eval(env, cal_list_nth(env, l, j), context);
 		switch(cal_obj_getType(env, e)){
 		case AL_OBJ_TYPE_ALIST:
 			{
@@ -124,6 +124,8 @@ al_obj al_list_eval(al_env env, al_obj l, al_obj context)
 		case AL_OBJ_TYPE_ATOM:
 			al_list_append_m(env, ll, e);
 			break;
+		case AL_OBJ_TYPE_NULL:
+			;
 		}
 	}
 	return ll;
@@ -368,7 +370,7 @@ int cal_list_eql(al_env env, al_obj l1, al_obj l2)
 			return 0;
 		}
 		for(int i = 0; i < len1; i++){
-			if(!cal_atom_eql(env, cal_list_nth(env, l1, i), cal_list_nth(env, l2, i))){
+			if(!cal_obj_eql(env, cal_list_nth(env, l1, i), cal_list_nth(env, l2, i))){
 				return 0;
 			}
 		}

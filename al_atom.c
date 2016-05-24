@@ -165,7 +165,7 @@ size_t cal_atom_nformat(al_env env, char *s, size_t n, al_obj b)
 	return 0;
 }
 
-al_type cal_atom_getType(al_env env, al_obj v)
+char cal_atom_getType(al_env env, al_obj v)
 {
 	if(cal_obj_getType(env, v) == AL_OBJ_TYPE_ATOM){
 		return al_osc_getType(al_env_getRegion(env), cal_obj_getObj(env, v));

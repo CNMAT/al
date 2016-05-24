@@ -7,10 +7,10 @@ extern "C" {
 
 #include <inttypes.h>
 #include "al_obj.h"
-#include "al_region.h"
 #include "al_time.h"
+#include "al_env.h"
 
-typedef al_obj (*al_c_fnptr)(al_region region, al_obj obj, al_obj context);
+typedef al_obj (*al_c_fnptr)(al_env env, al_obj obj, al_obj context);
 
 typedef struct _al_c_int8
 {
