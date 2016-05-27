@@ -33,9 +33,14 @@ int main(int ac, char **av)
 {
 	al_env env = al_env_create(8000000, (char *)malloc(8000000), NULL);
 	al_obj stdlib = al_stdlib(env);
-
-	test(env, "{prog : @eql}", stdlib);
-	test(env, "{prog : @eql!@1}", stdlib);
+	OSC_PROFILE_TIMER_START(foo);
+	//test(env, "{prog : @eql}", stdlib);
+	//test(env, "{prog : (@eql!@1)!@1}", stdlib);
+	//test(env, "{prog : @nth!@1 !@! {n : 1, list : @nth!@1 !@! {list : @eql, n : 1}}}", stdlib);
+	test(env, "{prog : @nth!@1 !@ {n : [1, 0], list : [\"foo\", \"bar\"]}}", stdlib);
+	test(env, "{prog : @nth!@1 !@ {n : 1, list : [{foo : 1, bar : 2}, {bloo : 3, barf : 5}]}}", stdlib);
+	test(env, "{prog : @nth!@1 !@ {n : [1, 0], list : [{foo : 1, bar : 2}, {bloo : 3, barf : 5}]}}", stdlib);
+	/*
 	test(env, "{prog : @eqa}", stdlib);
 	test(env, "{prog : @0}", stdlib);
 	test(env, "{prog : {a : 10, b : 3}@0}", stdlib);
@@ -61,6 +66,12 @@ int main(int ac, char **av)
 
 	test(env, "{a : 3, b : 4, prog : @if!@1 !@ {test : @eql!@1 !@! {obj1 : @a!@1, obj2 : @b!@1}, then : true, else : false}}", stdlib);
 	test(env, "{a : 3, b : 3, prog : @if!@1 !@ {test : @eql!@1 !@! {obj1 : @a!@1, obj2 : @b!@1}, then : true, else : false}}", stdlib);
+	test(env, "{a : 3, b : 4, prog : @if!@1 !@ {test : @eql!@1 !@! {obj1 : @a!@1, obj2 : @b!@1}, then : true, else : @prog!@1}}", stdlib);
+
+	test(env, "{prog : @length!@1 !@! {list : @union!@1 !@ {rhs : {foo : [1, 2, 3], bar : [a, b, c]}, lhs : {fool : 10, bar : \"xxx\"}}}}", stdlib);
+	*/
+	OSC_PROFILE_TIMER_STOP(foo);
+	OSC_PROFILE_TIMER_PRINTF(foo);
 
 	printf("used %d bytes, %d bytes free\n", al_region_bytesUsed(al_env_getRegion(env)), al_region_bytesFree(al_env_getRegion(env)));
 	return 0;
